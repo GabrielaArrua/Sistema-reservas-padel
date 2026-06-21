@@ -1,0 +1,50 @@
+{% extends 'reservas/base.html' %}
+
+{% block content %}
+
+<h2>Nueva Reserva</h2>
+
+<form method="post">
+
+    {% csrf_token %}
+
+    <div class="mb-3">
+        {{ form.nombre_cliente.label_tag }}
+        {{ form.nombre_cliente }}
+        {{ form.nombre_cliente.errors }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.cancha.label_tag }}
+        {{ form.cancha }}
+        {{ form.cancha.errors }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.fecha.label_tag }}
+        {{ form.fecha }}
+        {{ form.fecha.errors }}
+    </div>
+
+    <div class="mb-3">
+        {{ form.horario.label_tag }}
+        {{ form.horario }}
+        {{ form.horario.errors }}
+    </div>
+
+    {% if form.non_field_errors %}
+    <div class="alert alert-danger">
+        {{ form.non_field_errors }}
+    </div>
+    {% endif %}
+
+    <button
+        type="submit"
+        class="btn btn-success"
+    >
+        Guardar Reserva
+    </button>
+
+</form>
+
+{% endblock %}

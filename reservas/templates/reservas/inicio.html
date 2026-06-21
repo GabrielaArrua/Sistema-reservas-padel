@@ -1,0 +1,156 @@
+{% extends 'reservas/base.html' %}
+{% load static %}
+
+{% block content %}
+
+<style>
+.hero {
+    min-height: calc(100vh - 56px);
+    background-image: url("{% static 'reservas/img/padel.jpg' %}");
+    background-size: cover;
+    background-position: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+}
+
+.hero::before {
+    content: "";
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background: linear-gradient(
+        rgba(0,0,0,0.6),
+        rgba(0,0,0,0.4)
+    );
+}
+
+.hero-content {
+    position: relative;
+    text-align: center;
+    color: white;
+    z-index: 1;
+}
+
+.hero h1 {
+    font-size: 56px;
+    font-weight: 700;
+}
+
+.hero p {
+    font-size: 20px;
+    margin-bottom: 25px;
+}
+
+.btn-home {
+    background: #198754;
+    border: none;
+    padding: 14px 26px;
+    border-radius: 12px;
+    text-decoration: none;
+    color: white;
+    font-weight: 600;
+    transition: all 0.2s ease;
+    margin: 0 5px;
+}
+
+.btn-home:hover {
+    transform: translateY(-2px);
+    box-shadow: 0 6px 15px rgba(0,0,0,0.2);
+}
+</style>
+
+{% if not user.is_authenticated %}
+
+<div class="hero">
+    <div class="hero-content">
+
+        <h1>🎾 Sistema de Reservas de Pádel</h1>
+
+        <p>
+            Reserva tu cancha de forma rápida y sencilla.
+        </p>
+
+        <a href="{% url 'login' %}" class="btn-home">
+            Iniciar sesión
+        </a>
+
+        <a href="{% url 'registro' %}" class="btn-home">
+            Registrarse
+        </a>
+
+    </div>
+</div>
+
+{% else %}
+
+<div class="container dashboard">
+
+    <div class="text-center mb-5">
+
+        <h1>Hola, {{ user.username }} 👋</h1>
+
+        <p class="lead">
+            Tienes {{ reservas_usuario|length }} reserva{{ reservas_usuario|length|pluralize }} registrada{{ reservas_usuario|length|pluralize }}.
+        </p>
+
+        <a href="{% url 'crear_reserva' %}" class="btn btn-success">
+            Nueva Reserva
+        </a>
+
+    </div>
+
+    <div class="card shadow dashboard-card">
+
+        <div class="card-body">
+
+            <h3 class="mb-4">Mis reservas</h3>
+
+            {% if reservas_usuario %}
+
+            <table class="table table-hover">
+
+                <thead>
+                    <tr>
+                        <th>Cancha</th>
+                        <th>Fecha</th>
+                        <th>Horario</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+
+                    {% for reserva in reservas_usuario %}
+
+                    <tr>
+                        <td>{{ reserva.cancha }}</td>
+                        <td>{{ reserva.fecha }}</td>
+                        <td>{{ reserva.horario }}</td>
+                    </tr>
+
+                    {% endfor %}
+
+                </tbody>
+
+            </table>
+
+            {% else %}
+
+            <div class="alert alert-info">
+                Todavía no tienes reservas.
+            </div>
+
+            {% endif %}
+
+        </div>
+
+    </div>
+
+</div>
+
+{% endif %}
+
+{% endblock %}
